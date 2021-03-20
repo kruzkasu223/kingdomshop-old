@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Order Failed
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Order Failed</h2>
+    <p class="empty_p">Your Order is Failed. Please Try Again.</p>
+    <p class="empty_p"><a class="btn" href="{% url 'contact' %}">Contact Us</a> if you have any issue related to place
+        order.</p>
+
+</div>
+{% endblock %}

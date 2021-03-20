@@ -1,0 +1,45 @@
+Kingdom Shop
+(https://kingdomshop.in)
+
+
+Your Order is Despatched
+Thanks for your order
+
+You'll receive an email for furthur updates and when your items are Shipped. You'll receive your items within 7 days. You'll find you Order Invoice attached with this email. If you have any questions, Contact Us on https://kingdomshop.in/contact
+
+
+SUMMARY:
+
+Order ID: {{ order.order_txnid }}
+Payment ID: {{ order.razorpay_payment_id }}
+Order Date: {{ order.created_at }}
+Order Total: ₹{{ order.total }}
+
+
+SHIPPING ADDRESS:
+
+Name: {{ order.first_name }} {{ order.last_name }}
+Email: {{ order.email }}
+Phone: {{ order.phone }}
+Address Line 1: {{ order.address_line_1 }}
+Address Line 2: {% if order.address_line_2 %}{{ order.address_line_2 }}{% else %}-{% endif %}
+Pincode: {{ order.pincode }}
+City: {{ order.city }}
+State: {{ order.state }}
+
+
+ITEMS ORDERED:
+
+{% for prod in ordered_products %}
+Name: {{prod.product.title}}
+Quantity: {{prod.quantity}}
+Price: ₹{{prod.totalPrice}}
+{% endfor %}
+
+Subtotal: ₹{{ order.total }}
+Shipping Charges: FREE
+Order Total: ₹{{ order.total }}
+
+
+From Kingdom Shop
+Thank You

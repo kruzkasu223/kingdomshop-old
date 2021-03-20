@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/form.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/user_details.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+Edit Details
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">Edit Details</h2>
+
+        <div class="form_div">
+
+            <form class="form_source" id="details_form" action="" method="post" accept-charset="utf-8" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="form-item form-phone">
+                    {% render_field form.phone type="text" class="form-input" id="form-phone" inputmode="phone" required="true" placeholder="" %}
+                    <label for="phone" class="form-label" id="phone-label">{{ form.phone.label_tag }}</label>
+
+                    <p class="error_msg" id="phone-error-message"></p>
+                    {% if form.phone.errors %}
+                    {% for error in form.phone.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-age">
+                    {% render_field form.age type="text" class="form-input" id="form-age" required="true" placeholder="" %}
+                    <label for="age" class="form-label" id="age-label">{{ form.age.label_tag }}</label>
+
+                    <p class="error_msg" id="age-error-message"></p>
+                    {% if form.age.errors %}
+                    {% for error in form.age.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.gender class="form-input" id="form-gender" required="true" placeholder="" %}
+                    <label for="Gender" class="form-label" style="font-size: 0.85rem; top: 1.2rem;"
+                        id="gender-label">{{ form.gender.label_tag }}</label>
+
+                    <p class="error_msg" id="gender-error-message"></p>
+                    {% if form.gender.errors %}
+                    {% for error in form.gender.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <p class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" id="form-submit" value="Update">
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

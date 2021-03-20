@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/slider.css' %}" rel="stylesheet">
+<link href="{% static 'css/product_listing.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/carousel.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+Home
+{% endblock %}
+
+
+{% block body %}
+{% include "home/slider.html" %}
+{% include "home/homecontent.html" %}
+{% endblock %}

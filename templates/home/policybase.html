@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<style>
+    .main_div {
+        width: 100%;
+        max-width: 800px;
+        background-color: var(--sc);
+        padding: 1rem 1rem 1rem 2rem;
+        margin: 1rem auto;
+        border-radius: .5rem;
+    }
+</style>
+{% endblock %}
+
+{% block title %}{{ policy.policy_name }}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">{{ policy.policy_name }}</h2>
+
+    <div class="main_div">
+        {{ policy.policy_details|safe }}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/product_listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/paginator.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+Your Wishlist
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Wishlist</h2>
+
+
+    {% if wishlist %}
+
+    <div class="container">
+
+        {% for item in wishlist %}
+        <div class="product_card">
+            <div class="card_prod_img_div">
+                <a href="{% url 'product_view' item.product.id item.product.slug item.product.sku %}">
+                    <img class="card_prod_img" src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+                </a>
+            </div>
+            <div class="card_prod_detail">
+                <div class="card_prod_title">
+                    <a
+                        href="{% url 'product_view' item.product.id item.product.slug item.product.sku %}">{{ item.product.title }}</a>
+                </div>
+                <div class="card_prod_price">
+                    {% if not item.product.discount_price %}
+                    <a href="{% url 'product_view' item.product.id item.product.slug item.product.sku %}">₹<span
+                            class="main_price">{{ item.product.price|intcomma }}</span></a>
+                    {% else %}
+                    <a href="{% url 'product_view' item.product.id item.product.slug item.product.sku %}">₹<span
+                            class="main_price">{{ item.product.discount_price|intcomma }}</span>
+                        <del><span class="disc_price">₹{{ item.product.price|intcomma }}</span></del></a>
+                    {% endif %}
+                </div>
+                <div class="ratings_div">
+                    <div class="review_rating">
+                        <a href="{% url 'product_view' item.product.id item.product.slug item.product.sku %}">
+                            <i class="fa fa-star {% if item.product.average_rating < 0.5 %}star-black{% endif %}"></i>
+                            <i class="fa fa-star {% if item.product.average_rating < 1.5 %}star-black{% endif %}"></i>
+                            <i class="fa fa-star {% if item.product.average_rating < 2.5 %}star-black{% endif %}"></i>
+                            <i class="fa fa-star {% if item.product.average_rating < 3.5 %}star-black{% endif %}"></i>
+                            <i class="fa fa-star {% if item.product.average_rating < 4.5 %}star-black{% endif %}"></i>
+                        </a>
+                    </div>
+                    <div class="ratings_rate">
+                        <a
+                            href="{% url 'product_view' item.product.id item.product.slug item.product.sku %}">{{ item.product.average_rating|floatformat:"-1" }}/5</a>
+                    </div>
+                    <div class="ratings_count">
+                        <a href="{% url 'product_view' item.product.id item.product.slug item.product.sku %}">({{ item.product.count_review }}
+                            Ratings)</a>
+                    </div>
+                </div>
+                <div class="btns_div">
+                    <a {% if item.product.quantity_on_stock <= 0 %}
+                        {% else %}href="{% if request.user.is_authenticated %}{% url 'add_to_cart' item.product.id %}{% else %}{% url 'account_login' %}?next={{request.path}}{% endif %}"
+                        {% endif %} class="btn add-cart">
+                        <i class="fa fa-cart-plus"></i> Add to Cart
+                    </a>
+                    <a href="{% url 'wishlist_delete' item.id %}"
+                        onclick="return confirm('This Product Will be Deleted From Your Wishlist! Are you sure?')"
+                        class="btn">
+                        <i class="fa fa-trash"></i> Remove
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% if wishlist.paginator.num_pages > 1 %}
+    <div class="paginator_wrap"></div>
+    <div class="paginator">
+        {% if wishlist.has_previous %}
+        <a class="link" href="?page=1">First</a>
+        <a class="link" href="?page={{ wishlist.previous_page_number }}">Prev</a>
+        {% endif %}
+        {% for num in wishlist.paginator.page_range %} <br>
+        {% if wishlist.number == num %}
+        <span class="link link_active">{{ num }}</span>
+        {% elif num > wishlist.number|add:'-3' and num < wishlist.number|add:'3' %}
+        <a class="link" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+        {% endfor %}
+        {% if wishlist.has_next %}
+        <a class="link" href="?page={{ wishlist.next_page_number }}">Next</a>
+        <a class="link" href="?page={{ wishlist.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </div>
+    <div class="empty_p">
+        (Page {{ wishlist.number }} of {{ wishlist.paginator.num_pages }})
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<p class="empty_p">You don't have anything in Wishlist</p>
+
+{% endif %}
+</div>
+
+{% endblock %}

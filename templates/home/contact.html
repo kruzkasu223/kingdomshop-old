@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/form.css' %}" rel="stylesheet">
+<style>
+    .btn_div_sm {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/contact.js' %}"></script>
+{% endblock %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block body %}
+<div class="container">
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">Contact Us</h2>
+
+        <div class="form_div">
+
+            <form class="form_source" id="contact_form" name="Contact" method="POST" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="form-item form-name">
+                    {% if user.is_authenticated %}
+                    {% render_field form.name value=request.user.get_full_name %}
+                    {% else %}
+                    {{ form.name }}
+                    {% endif %}
+                    <label for="name" class="form-label" id="name-label">{{ form.name.label_tag }}</label>
+                    <p class="error_msg" id="name-error-message"></p>
+                    {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-email">
+                    {% if user.is_authenticated %}
+                    {% render_field form.email value=request.user.email %}
+                    {% else %}
+                    {{ form.email }}
+                    {% endif %}
+                    <label for="email" class="form-label" id="email-label">{{ form.email.label_tag }}</label>
+                    <p class="error_msg" id="email-error-message"></p>
+                    {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {{ form.subject }}
+                    <label for="subject" class="form-label" id="subject-label">{{ form.subject.label_tag }}</label>
+                    <p class="error_msg" id="subject-error-message"></p>
+                    {% if form.subject.errors %}
+                    {% for error in form.subject.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                
+                <div class="form-item">
+                    {{ form.message }}
+                    <label for="message" class="form-label form-msg-label"
+                        id="msg-label">{{ form.message.label_tag }}</label>
+                    <p class="error_msg" id="msg-error-message"></p>
+                    {% if form.message.errors %}
+                    {% for error in form.message.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <p class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" id="form-submit" value="Submit">
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <h2 class="main_title">Visit our Social Media</h2>
+    <div class="btn_div_sm">
+        {% for item in smlist %}
+        <a class="btn btn-l" href="{{ item.csm_url }}">{{ item.csm_name }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

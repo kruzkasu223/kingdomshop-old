@@ -1,0 +1,21 @@
+.main_div {
+    width: 100%;
+    max-width: 800px;
+    background-color: var(--sc);
+    padding: 1rem;
+    margin: 1rem auto;
+    border-radius: 0.5rem;
+}
+
+.review_rating {
+    margin: 0 0 0 0.5rem;
+    color: var(--pc);
+}
+
+.star-black {
+    color: var(--bc);
+}
+
+.date_time {
+    margin: 0.5rem 0;
+}

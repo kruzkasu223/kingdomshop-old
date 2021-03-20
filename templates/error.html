@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ error }}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">{{ error }}</h2>
+
+    <p class="empty_p">Looks like you're lost...</p>
+    <p class="empty_p"><a class="btn btn-l" href="{% url 'home' %}">Go Home</a></p>
+
+
+</div>
+
+{% endblock %}

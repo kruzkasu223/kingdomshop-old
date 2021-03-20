@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Account Inactive{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h1 class="main_title">Account Inactive</h1>
+
+    <p class="empty_p">This account is inactive.</p>
+</div>
+{% endblock %}

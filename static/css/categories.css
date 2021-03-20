@@ -1,0 +1,62 @@
+.accordion_wrap {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.accordion {
+    background-color: var(--sc);
+    color: var(--bc);
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem auto;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+.aaactive,
+.accordion:hover,
+.accordion:focus {
+    background-color: var(--pc);
+}
+
+.panel {
+    padding: 0 0 0 2rem;
+    background-color: var(--wc);
+    display: none;
+    overflow: hidden;
+}
+
+.accordion:after {
+    content: "\f067";
+    font-family: fontawesome;
+    font-size: 1rem;
+    color: var(--bc);
+    float: right;
+}
+
+.aaactive:after {
+    content: "\f068";
+    font-family: fontawesome;
+}
+
+.last_node {
+    background-color: var(--sc);
+    color: var(--bc);
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+.last_node:hover,
+.last_node:focus {
+    background-color: var(--pc);
+}

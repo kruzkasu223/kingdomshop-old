@@ -1,0 +1,89 @@
+{% load static %}
+{% load hometags %}
+
+
+<div class="container footer-div {% accounts_page %}">
+
+
+    <div class="footer-div-ul">
+        <p class="footer-ul-title">Your Account</p>
+        <ul class="footer-ul">
+            {% if user.is_authenticated %}
+            <a href="{% url 'userprofile_home' %}">
+                <li>Your Account</li>
+            </a>
+            <a href="{% url 'user_orders' %}">
+                <li>Your Order</li>
+            </a>
+            <a href="{% url 'wishlist' %}">
+                <li>Your Wishlist</li>
+            </a>
+            <a href="{% url 'account_logout' %}">
+                <li>Log Out</li>
+            </a>
+            {% else %}
+            <a href="{% url 'account_login' %}">
+                <li>Log In</li>
+            </a>
+            <a href="{% url 'account_signup' %}">
+                <li>Create an Account</li>
+            </a>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="footer-div-ul">
+        <p class="footer-ul-title">About/Help</p>
+        <ul class="footer-ul">
+            <a href="{% url 'about' %}">
+                <li>About Us</li>
+            </a>
+            <a href="{% url 'contact' %}">
+                <li>Conatct Us</li>
+            </a>
+            <a href="{% url 'faqs' %}">
+                <li>FAQs</li>
+            </a>
+        </ul>
+    </div>
+
+    <div class="footer-div-ul">
+        <p class="footer-ul-title">Policies</p>
+        <ul class="footer-ul">
+            {% for item in policy_list %}
+            <a href="{% url 'policy_view' item.slug %}">
+                <li>{{ item.policy_name }}</li>
+            </a>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="footer-div-ul">
+        <p class="footer-ul-title">Social</p>
+        <ul class="footer-ul">
+            {% for item in smlist %}
+            <a href="{{ item.csm_url }}" target="_blank">
+                <li>{{ item.csm_name }}</li>
+            </a>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+
+<div class="footer-foot">
+    <div class="branding-footer">
+        <a class="branding-footer-a" href="{% url 'home' %}"><img class="branding-footer-img"
+                src="{% static 'images/logo_full.png' %}" alt="Kingdom Logo Full"></a>
+    </div>
+
+    <div class="footer-credits">
+        <p class="copyright-credit">
+            &copy; 2020 Kingdom - All Rights Reserved.
+        </p>
+        <p class="code-credit">
+            <i class="fa fa-code"></i> with <i class="fa fa-heart-o"></i> By Kru'Z&trade;
+        </p>
+    </div>
+</div>

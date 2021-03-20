@@ -1,0 +1,32 @@
+# change settings from .dev to .prod
+
+sudo nano shop/settings/current.py
+cat shop/settings/current.py
+
+
+# run this commands
+
+python manage.py collectstatic
+python manage.py check --deploy
+
+# this too, if you've changed the database...
+python manage.py makemigrations
+python manage.py migrate
+
+
+# update all packages at once
+
+pip freeze | %{$_.split('==')[0]} | %{pip install --upgrade $_}
+
+
+# restart servers
+
+sudo supervisorctl reload
+sudo service nginx restart
+
+
+# check status
+
+sudo supervisorctl status
+sudo service nginx status
+

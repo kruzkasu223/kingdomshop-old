@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/form.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/account_login.js' %}"></script>
+{% endblock %}
+
+{% block title %}Log In{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">Log In</h2>
+
+        <div class="form_div">
+            <form class="form_source" id="login_form" method="POST" action="{% url 'account_login' %}" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="form-item form-email">
+                    {% render_field form.login type="text" class="form-input" id="form-email" inputmode="email" required="true" placeholder="" %}
+                    <label for="email" class="form-label" id="email-label">{{ form.login.label_tag }}</label>
+
+                    <p class="error_msg" id="email-error-message"></p>
+                    {% if form.login.errors %}
+                    {% for error in form.login.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {% render_field form.password class="form-input" id="form-pass" required="true" placeholder="" %}
+                    <label for="name" class="form-label" id="name-label">{{ form.password.label_tag }}</label>
+
+                    <p class="error_msg" id="pass-error-message"></p>
+                    {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <p style="margin-top: 1rem;" class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" id="form-submit" value="Log In">
+                </div>
+
+            </form>
+
+            <p style="margin: 2rem 0 1.5rem; text-align: center;"><a class="button secondaryAction btn"
+                    href="{% url 'account_reset_password' %}">Forgot Password?</a></p>
+            <p style="margin: 1rem 0; text-align: center;">
+                Don't have an account?<br><a class="btn" href="{% url 'account_signup' %}">Create an Account</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

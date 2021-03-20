@@ -1,0 +1,10 @@
+.policy_btn_div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.policy_btn_div .btn {
+    margin: 0.5rem;
+}

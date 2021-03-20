@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/form.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/user_address.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+Edit Address
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">Edit Address</h2>
+
+        <div class="form_div">
+            <form class="form_source" id="address_form" action="" method="post" accept-charset="utf-8" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="form-item">
+                    {% render_field form.address_line_1 type="text" class="form-input" id="form-aline1" required="true" placeholder="" %}
+                    <label for="Address Line 1" class="form-label"
+                        id="aline1-label">{{ form.address_line_1.label_tag }}</label>
+
+                    <p class="error_msg" id="aline1-error-message"></p>
+                    {% if form.address_line_1.errors %}
+                    {% for error in form.address_line_1.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.address_line_2 class="form-input" id="form-aline2" required="true" placeholder="" %}
+                    <label for="Address Line 2" class="form-label" id="aline2-label">{{ form.address_line_2.label_tag }}
+                        (optional)</label>
+
+                    <p class="error_msg" id="aline2-error-message"></p>
+                    {% if form.address_line_2.errors %}
+                    {% for error in form.address_line_2.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.pincode class="form-input" type="text" id="form-pincode" required="true" placeholder="" %}
+                    <label for="Pincode" class="form-label" id="pincode-label">{{ form.pincode.label_tag }}</label>
+
+                    <p class="error_msg" id="pincode-error-message"></p>
+                    {% if form.pincode.errors %}
+                    {% for error in form.pincode.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.city class="form-input" id="form-city" required="true" placeholder="" %}
+                    <label for="City" class="form-label" id="city-label">{{ form.city.label_tag }}</label>
+
+                    <p class="error_msg" id="city-error-message"></p>
+                    {% if form.city.errors %}
+                    {% for error in form.city.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.state class="form-input" id="form-state" required="true" placeholder="" %}
+                    <label for="State" class="form-label" style="font-size: 0.85rem; top: 1.2rem;"
+                        id="state-label">{{ form.state.label_tag }}</label>
+
+                    <p class="error_msg" id="state-error-message"></p>
+                    {% if form.state.errors %}
+                    {% for error in form.state.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <p class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" id="form-submit" value="Update">
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

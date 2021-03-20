@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/user_reviews.css' %}" rel="stylesheet">
+<link href="{% static 'css/paginator.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block title %}
+Your Reviews
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Posted Reviews</h2>
+
+
+    {% if reviews %}
+    {% for review in reviews %}
+    <div class="main_div">
+        <p>Product Name: <a
+                href="{% url 'product_view' review.product.id review.product.slug review.product.sku %}"><span
+                    class="bold">{{ review.product.title }}</span></a>
+        </p>
+        <p>Ratings: {{ review.rating }}/5
+            <span class="review_rating">
+                <i class="fa fa-star {% if review.rating < 1 %}star-black{% endif %}"></i>
+                <i class="fa fa-star {% if review.rating < 2 %}star-black{% endif %}"></i>
+                <i class="fa fa-star {% if review.rating < 3 %}star-black{% endif %}"></i>
+                <i class="fa fa-star {% if review.rating < 4 %}star-black{% endif %}"></i>
+                <i class="fa fa-star {% if review.rating < 5 %}star-black{% endif %}"></i>
+            </span>
+        </p>
+        <p>Review Title: {% if review.title %}{{ review.title }}{% else %}-{% endif %}</p>
+        <p>Review: {% if review.review %}{{ review.review }}{% else %}-{% endif %}</p>
+        <p>Review Status: {{ review.status }}</p>
+        {% if review.note %}
+        <p>Message From Admin: {{ review.note }}</p>
+        {% endif %}
+        <p class="date_time">Review Posted: {{ review.created_at|naturaltime }}</p>
+        <a href="{% url 'user_reviews_update' review.id %}" class="btn"><i class="fa fa-pencil-square-o"></i> Edit
+            Review</a>
+        <a href="{% url 'user_reviews_delete' review.id %}"
+            onclick="return confirm('This Review/Rating Will be Deleted! Are you sure?')" class="btn"><i
+                class="fa fa-trash"></i> Delete Review</a>
+
+    </div>
+    {% endfor %}
+
+    {% if reviews.paginator.num_pages > 1 %}
+    <div class="paginator_wrap">
+        <div class="paginator">
+            {% if reviews.has_previous %}
+            <a class="link" href="?page=1">First</a>
+            <a class="link" href="?page={{ reviews.previous_page_number }}">Prev</a>
+            {% endif %}
+            {% for num in reviews.paginator.page_range %} <br>
+            {% if reviews.number == num %}
+            <span class="link link_active">{{ num }}</span>
+            {% elif num > reviews.number|add:'-3' and num < reviews.number|add:'3' %}
+            <a class="link" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            {% if reviews.has_next %}
+            <a class="link" href="?page={{ reviews.next_page_number }}">Next</a>
+            <a class="link" href="?page={{ reviews.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
+        <div class="empty_p">
+            (Page {{ reviews.number }} of {{ reviews.paginator.num_pages }})
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% else %}
+
+    <p class="empty_p">There is no Reviews/Ratings you've done yet...</p>
+
+    {% endif %}
+</div>
+
+{% endblock %}

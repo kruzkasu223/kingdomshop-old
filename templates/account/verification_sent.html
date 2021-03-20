@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Verify Your E-mail Address{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Verify Your E-mail Address</h2>
+
+    <p class="empty_p">We have sent an e-mail to you for verification. Follow the link provided to finalize the signup
+        process. Please contact us if you do not receive it within a few minutes.</p>
+    <p class="empty_p">Also check spam folder if you can't find mail in your inbox.</p>
+
+</div>
+{% endblock %}

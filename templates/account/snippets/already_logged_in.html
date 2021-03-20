@@ -1,0 +1,5 @@
+{% load account %}
+
+{% user_display user as user_display %}
+
+<p class="empty_p"><span class="bold">Note:</span> You Are Already Logged In as {{ user_display }}.</p>

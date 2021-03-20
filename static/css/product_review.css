@@ -1,0 +1,157 @@
+.form_div_wrap {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 800px;
+    padding: 1rem;
+}
+
+.form_div {
+    width: 80%;
+    font-size: 1rem;
+    margin: 0 auto;
+}
+
+.form-item {
+    position: relative;
+    width: 100%;
+}
+
+.form-input {
+    width: 100%;
+    height: 2.75rem;
+    margin: 1.5rem auto;
+    padding: 0.5rem 0.5rem 0;
+    font-size: 1rem;
+    box-sizing: border-box;
+    box-shadow: none;
+    outline: none;
+    color: var(--bc);
+    border: 2px solid var(--bc);
+    border-radius: 0.25rem;
+    background: transparent;
+}
+
+.form-msg {
+    resize: none;
+    height: 5rem;
+    padding-top: 1rem;
+}
+
+.form-input:focus,
+.form-input:valid {
+    border-color: var(--pc);
+}
+
+.form-label {
+    position: absolute;
+    top: 2.1rem;
+    left: calc(0.5rem + 2px);
+    font-size: 1.25rem;
+    color: var(--bc);
+    pointer-events: none;
+    transition: 0.1s;
+}
+
+.form-input:focus ~ .form-label,
+.form-input:valid ~ .form-label {
+    font-size: 0.85rem;
+    top: 1.7rem;
+    color: var(--pc);
+}
+
+.form-msg-label {
+    display: block;
+    background: var(--wc);
+}
+
+.form-btn {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+.form-btn {
+    font-size: 1.2rem;
+}
+
+.review_user {
+    font-weight: bold;
+}
+
+.review_user span {
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    font-weight: normal;
+}
+
+.review_title {
+    font-size: 1.1rem;
+}
+
+.review_review {
+    font-size: 0.9rem;
+}
+
+.review_rating {
+    color: var(--pc);
+}
+
+.star-black {
+    color: var(--bc) !important;
+}
+
+fieldset.rating {
+    display: inline-block;
+    border: none;
+    text-align: left;
+    color: var(--bc);
+}
+
+fieldset.rating legend {
+    font-size: 1.25rem;
+    margin: 0 0 0 0.25rem;
+}
+
+fieldset.rating span {
+    display: block;
+    font-size: 0.75rem;
+    clear: both;
+    margin: 0 0 0 0.25rem;
+}
+
+fieldset.rating > input[type="radio"] {
+    display: none;
+}
+
+fieldset.rating > input[type="radio"] + label {
+    float: right;
+    clear: left;
+    font-size: 0;
+    color: var(--bc);
+    cursor: pointer;
+    margin: -0.25rem 0.25rem 0.25rem;
+}
+
+fieldset.rating > input[type="radio"] + label:before {
+    font-size: 2rem;
+    display: inline-block;
+    content: "\2605";
+}
+
+fieldset.rating > input[type="radio"] + label:hover,
+fieldset.rating > input[type="radio"] + label:hover ~ label {
+    color: var(--pc) !important;
+}
+
+fieldset.rating > input[type="radio"]:checked ~ label {
+    color: var(--pc);
+    position: relative;
+}
+
+.review {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--sc);
+    border-radius: 0.5rem;
+    margin: 0.75rem;
+    padding: 0.5rem;
+}

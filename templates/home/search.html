@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+{% load hometags %}
+
+{% block style %}
+<link href="{% static 'css/product_listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/paginator.css' %}" rel="stylesheet">
+<style>
+    .main_div {
+        width: 100%;
+        max-width: 1000px;
+        background-color: var(--sc);
+        padding: 1rem;
+        margin: 1rem auto;
+        border-radius: .5rem;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+Search
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="main_div">
+        <p>Search Results of: <span class="bold">{{ query }}</span></p>
+    </div>
+
+    {% if products %}
+
+    {% for product in products %}
+    <div class="product_card">
+        <div class="card_prod_img_div">
+            <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                <img class="card_prod_img" src="{{ product.image.url }}" alt="{{ product.title }}">
+            </a>
+        </div>
+        <div class="card_prod_detail">
+            <div class="card_prod_title">
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.title }}</a>
+            </div>
+            <div class="card_prod_price">
+                {% if not product.discount_price %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.price|intcomma }}</span></a>
+                {% else %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.discount_price|intcomma }}</span>
+                    <del><span class="disc_price">₹{{ product.price|intcomma }}</span></del></a>
+                {% endif %}
+            </div>
+            <div class="ratings_div">
+                <div class="review_rating">
+                    <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                        <i class="fa fa-star {% if product.average_rating < 0.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 1.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 2.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 3.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 4.5 %}star-black{% endif %}"></i>
+                    </a>
+                </div>
+                <div class="ratings_rate">
+                    <a
+                        href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.average_rating|floatformat:"-1" }}/5</a>
+                </div>
+                <div class="ratings_count">
+                    <a
+                        href="{% url 'product_view' product.id product.slug product.sku %}">({{ product.count_review }})</a>
+                </div>
+            </div>
+            <a href="{% if request.user.is_authenticated %}{% url 'add_to_cart' product.id %}{% else %}{% url 'account_login' %}?next={{request.path}}{% endif %}"
+                class="btn add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if products.paginator.num_pages > 1 %}
+    <div class="paginator_wrap">
+        <div class="paginator">
+            {% if products.has_previous %}
+            <a class="link" href="{% relative_url 1 'page' request.GET.urlencode %}">First</a>
+            <a class="link"
+                href="{% relative_url products.previous_page_number 'page' request.GET.urlencode %}">Prev</a>
+            {% endif %}
+            {% for num in products.paginator.page_range %} <br>
+            {% if products.number == num %}
+            <span class="link link_active">{{ num }}</span>
+            {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+            <a class="link" href="{% relative_url num 'page' request.GET.urlencode %}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            {% if products.has_next %}
+            <a class="link" href="{% relative_url products.next_page_number 'page' request.GET.urlencode %}">Next</a>
+            <a class="link" href="{% relative_url products.paginator.num_pages 'page' request.GET.urlencode %}">Last</a>
+            {% endif %}
+        </div>
+        <div class="empty_p">
+            (Page {{ products.number }} of {{ products.paginator.num_pages }})
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <p class="empty_p">We couldn't find any product related to your query...</p>
+    <p class="empty_p">Please check your search query or try entering something else...</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

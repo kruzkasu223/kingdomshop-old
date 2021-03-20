@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/form.css' %}" rel="stylesheet">
+<link href="{% static 'css/product_listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/cart.css' %}" rel="stylesheet">
+<style>
+    .product_card {
+        width: 100% !important;
+    }
+
+    @media (max-width: 500px) {
+        .product_card {
+            height: 200px !important;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .product_card {
+            height: 225px !important;
+        }
+    }
+
+    input[type="number"] {
+        -webkit-appearance: textfield;
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .quantity_box {
+        display: flex;
+        margin: .5rem 0;
+        align-items: center;
+    }
+
+    .quantity {
+        width: 1.5rem;
+        text-align: center;
+        background-color: transparent;
+        border: 0px;
+        border-radius: .25rem;
+        font-size: 1rem;
+        font-weight: bold;
+        font-family: var(--pff);
+    }
+
+    .q_btn_minus {
+        margin: 0 0 0 .5rem;
+        cursor: pointer;
+    }
+
+    .q_btn_plus {
+        margin: 0;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/place_order.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+Place Order
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">
+            Place Your Order
+        </h2>
+
+        <div class="form_div">
+            {% if not r_payment %}
+
+            <form class="form_source" id="order_form" action="" method="post" accept-charset="utf-8" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="form-item form-name">
+                    {% render_field form.first_name class="form-input" id="form-fname" required="true" placeholder="" value=request.user.first_name %}
+                    <label for="name" class="form-label" id="name-label">{{ form.first_name.label_tag }}</label>
+
+                    <p class="error_msg" id="fname-error-message"></p>
+                    {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {% render_field form.last_name class="form-input" id="form-lname" required="true" placeholder="" value=request.user.last_name %}
+                    <label for="name" class="form-label" id="name-label">{{ form.last_name.label_tag }}</label>
+
+                    <p class="error_msg" id="lname-error-message"></p>
+                    {% if form.last_name.errors %}
+                    {% for error in form.last_name.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-email">
+                    {% render_field form.email type="text" class="form-input" id="form-email" inputmode="email" required="true" placeholder="" value=request.user.email %}
+                    <label for="email" class="form-label" id="email-label">{{ form.email.label_tag }}</label>
+
+                    <p class="error_msg" id="email-error-message"></p>
+                    {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-phone">
+                    {% if userdetail.phone %}
+                    {% render_field form.phone type="text" class="form-input" id="form-phone" inputmode="phone" required="true" placeholder="" value=userdetail.phone %}
+                    {% else %}
+                    {% render_field form.phone type="text" class="form-input" id="form-phone" inputmode="phone" required="true" placeholder="" %}
+                    {% endif %}
+                    <label for="phone" class="form-label" id="phone-label">{{ form.phone.label_tag }}</label>
+
+                    <p class="error_msg" id="phone-error-message"></p>
+                    {% if form.phone.errors %}
+                    {% for error in form.phone.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% if useraddress.address_line_1 %}
+                    {% render_field form.address_line_1 type="text" class="form-input" id="form-aline1" required="true" placeholder="" value=useraddress.address_line_1 %}
+                    {% else %}
+                    {% render_field form.address_line_1 type="text" class="form-input" id="form-aline1" required="true" placeholder="" %}
+                    {% endif %}
+                    <label for="Address Line 1" class="form-label"
+                        id="aline1-label">{{ form.address_line_1.label_tag }}</label>
+
+                    <p class="error_msg" id="aline1-error-message"></p>
+                    {% if form.address_line_1.errors %}
+                    {% for error in form.address_line_1.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% if useraddress.address_line_2 %}
+                    {% render_field form.address_line_2 class="form-input" id="form-aline2" required="true" placeholder="" value=useraddress.address_line_2 %}
+                    {% else %}
+                    {% render_field form.address_line_2 class="form-input" id="form-aline2" required="true" placeholder="" %}
+                    {% endif %}
+                    <label for="Address Line 2" class="form-label" id="aline2-label">{{ form.address_line_2.label_tag }}
+                        (optional)</label>
+
+                    <p class="error_msg" id="aline2-error-message"></p>
+                    {% if form.address_line_2.errors %}
+                    {% for error in form.address_line_2.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% if useraddress.pincode %}
+                    {% render_field form.pincode class="form-input" type="text" id="form-pincode" required="true" placeholder="" value=useraddress.pincode %}
+                    {% else %}
+                    {% render_field form.pincode class="form-input" type="text" id="form-pincode" required="true" placeholder="" %}
+                    {% endif %}
+                    <label for="Pincode" class="form-label" id="pincode-label">{{ form.pincode.label_tag }}</label>
+
+                    <p class="error_msg" id="pincode-error-message"></p>
+                    {% if form.pincode.errors %}
+                    {% for error in form.pincode.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% if useraddress.city %}
+                    {% render_field form.city class="form-input" id="form-city" required="true" placeholder="" value=useraddress.city %}
+                    {% else %}
+                    {% render_field form.city class="form-input" id="form-city" required="true" placeholder="" %}
+                    {% endif %}
+                    <label for="City" class="form-label" id="city-label">{{ form.city.label_tag }}</label>
+
+                    <p class="error_msg" id="city-error-message"></p>
+                    {% if form.city.errors %}
+                    {% for error in form.city.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.state class="form-input" id="form-state" required="true" placeholder="" %}
+                    <label for="State" class="form-label" style="font-size: 0.85rem; top: 1.2rem;"
+                        id="state-label">{{ form.state.label_tag }}</label>
+
+                    <p class="error_msg" id="state-error-message"></p>
+                    {% if form.state.errors %}
+                    {% for error in form.state.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.note class="form-input form-msg" type="textarea" id="form-msg" required="true" placeholder="" %}
+                    <label for="note" class="form-label form-msg-label" id="msg-label">{{ form.note.label_tag }}
+                        (optional)</label>
+
+                    <p class="error_msg" id="msg-error-message"></p>
+                    {% if form.note.errors %}
+                    {% for error in form.note.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                {% if useraddress.state %}
+                <script>
+                    const myState = () => {
+                        document.getElementById("form-state").value = "{{ useraddress.state }}";
+                    }
+                    myState()
+                </script>
+                {% endif %}
+
+                <div>
+                    <div class="product_card">
+                        <div class="card_prod_img_div">
+                            <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                                <img class="card_prod_img" src="{{ product.image.url }}" alt="{{ product.title }}">
+                            </a>
+                        </div>
+                        <div class="card_prod_detail">
+                            <div class="card_prod_title">
+                                <a
+                                    href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.title }}</a>
+                            </div>
+                            <div class="card_prod_price">
+                                {% if not product.discount_price %}
+                                <a href="{% url 'product_view' product.id product.slug product.sku %}">Price:
+                                    ₹<span class="main_price">{{ product.price|intcomma }}</span></a>
+                                {% else %}
+                                <a href="{% url 'product_view' product.id product.slug product.sku %}">Price:
+                                    ₹<span class="main_price">{{ product.discount_price|intcomma }}</span>
+                                    <del><span class="disc_price">₹{{ product.price|intcomma }}</span></del></a>
+                                {% endif %}
+                            </div>
+
+                            <div class="quantity_box">
+                                <div>Quantity: </div>
+                                <div class="q_btn_minus"
+                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown();get_order_total();">
+                                    <i class="fa fa-minus-square-o"></i>
+                                </div>
+                                <input class="quantity" min="1" id="quantity" name="quantity" value="1" type="number"
+                                    readonly>
+                                <div class="q_btn_plus"
+                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp(); get_order_total();">
+                                    <i class="fa fa-plus-square-o"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                        {% if form2.quantity.errors %}
+                        {% for error in form2.quantity.errors %}
+                        <p class="error_msg">{{ error }}</p>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="main_div main_price">Order Total: ₹<span id="order_total">{{ total|intcomma }}</span>
+                    </div>
+                </div>
+
+                <script charset="utf-8">
+                    let quantity_form = document.getElementById("quantity");
+                    const get_order_total = () => {
+                        let price = Number("{% if product.discount_price %} {{ product.discount_price }} {% else %} {{ product.price }} {% endif %}");
+                        let quantity = Number(document.getElementById("quantity").value);
+                        let total = price * quantity;
+                        document.getElementById("order_total").innerHTML = total;
+                    }
+                    get_order_total();
+                    quantity_form.addEventListener('focusout', get_order_total);
+                </script>
+
+                <h3 class="empty_p">Please check all the details before confirming.</h3>
+
+                <p class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" style="cursor: pointer;" id="form-submit"
+                        value="Confirm And Pay">
+                </div>
+
+            </form>
+            {% endif %}
+
+            {% if r_payment %}
+
+            <p class="empty_p">Please don't Refresh/Reload this page and don't leave this page untill Payment is Done.
+            </p>
+
+            <div class="main_div main_price">Order Total: ₹{{ total|intcomma }}</div>
+
+            <form class="empty_p" action="{% url "order_completed_now" %}" method="POST">
+                <style>
+                    form.empty_p button,
+                    form.empty_p input[type="button"],
+                    form.empty_p input[type="submit"] {
+                        display: inline-block;
+                        font-size: 1rem;
+                        border: none;
+                        padding: 0.25rem 0.75rem;
+                        margin: 0.25rem;
+                        border-radius: 0.25rem;
+                        background-color: var(--pc);
+                        text-align: center;
+                        font-size: 1.125rem;
+                        text-transform: uppercase;
+                        font-family: var(--sff);
+                        cursor: pointer;
+                    }
+
+                    form.empty_p button:hover,
+                    form.empty_p button:focus,
+                    form.empty_p input[type="button"]:hover,
+                    form.empty_p input[type="button"]:focus,
+                    form.empty_p input[type="submit"]:hover,
+                    form.empty_p input[type="submit"]:focus {
+                        filter: brightness(85%);
+                    }
+                </style>
+                <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="{{ r_key_id }}"
+                    data-amount="{{ r_payment.totalAmount }}" data-currency="INR" data-order_id="{{ r_payment.id }}"
+                    data-buttontext="Make Payment" data-name="Kingdom Shop" data-description="Payment For Kingdom Shop"
+                    data-prefill.name="{{ request.user.first_name }} {{ request.user.last_name }}"
+                    data-prefill.email="{{ request.user.email }}"
+                    data-prefill.contact="{% if userdetail.phone %}{{ userdetail.phone }}{% endif %}"></script>
+                <input type="hidden" custom="Hidden Element" name="hidden">
+            </form>
+
+            <script>
+                if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+                    window.location = '{% url "order_completed_now" %}';
+                }
+            </script>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

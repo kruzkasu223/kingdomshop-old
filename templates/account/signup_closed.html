@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign Up Closed{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Sign Up Closed</h2>
+
+    <p class="empty_p">We are sorry, but the sign up is currently closed.</p>
+</div>
+{% endblock %}

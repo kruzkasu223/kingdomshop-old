@@ -1,0 +1,129 @@
+{% load humanize %}
+{% load humanize %}
+{% load static %}
+
+
+<!-- ----- 
+Trending
+------- -->
+
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Trending</h2>
+
+    {% for product in product_trending %}
+    <div class="product_card">
+        <div class="card_prod_img_div">
+            <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                <img class="card_prod_img" src="{{ product.image.url }}" alt="{{ product.title }}">
+            </a>
+        </div>
+        <div class="card_prod_detail">
+            <div class="card_prod_title">
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.title }}</a>
+            </div>
+            <div class="card_prod_price">
+                {% if not product.discount_price %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.price|intcomma }}</span></a>
+                {% else %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.discount_price|intcomma }}</span>
+                    <del><span class="disc_price">₹{{ product.price|intcomma }}</span></del></a>
+                {% endif %}
+            </div>
+            <div class="ratings_div">
+                <div class="review_rating">
+                    <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                        <i class="fa fa-star {% if product.average_rating < 0.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 1.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 2.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 3.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 4.5 %}star-black{% endif %}"></i>
+                    </a>
+                </div>
+                <div class="ratings_rate">
+                    <a
+                        href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.average_rating|floatformat:"-1" }}/5</a>
+                </div>
+                <div class="ratings_count">
+                    <a href="{% url 'product_view' product.id product.slug product.sku %}">({{ product.count_review }}
+                        Ratings)</a>
+                </div>
+            </div>
+            <a {% if product.quantity_on_stock <= 0 %}
+                {% else %}href="{% if request.user.is_authenticated %}{% url 'add_to_cart' product.id %}{% else %}{% url 'account_login' %}?next={{request.path}}{% endif %}"
+                {% endif %} class="btn add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+    <!-- ----- 
+Newly Arrived
+------- -->
+
+    <h2 class="main_title">Newly Arrived</h2>
+
+    {% for product in product_recent %}
+    <div class="product_card">
+        <div class="card_prod_img_div">
+            <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                <img class="card_prod_img" src="{{ product.image.url }}" alt="{{ product.title }}">
+            </a>
+        </div>
+        <div class="card_prod_detail">
+            <div class="card_prod_title">
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.title }}</a>
+            </div>
+            <div class="card_prod_price">
+                {% if not product.discount_price %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.price|intcomma }}</span></a>
+                {% else %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.discount_price|intcomma }}</span>
+                    <del><span class="disc_price">₹{{ product.price|intcomma }}</span></del></a>
+                {% endif %}
+            </div>
+            <div class="ratings_div">
+                <div class="review_rating">
+                    <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                        <i class="fa fa-star {% if product.average_rating < 0.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 1.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 2.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 3.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 4.5 %}star-black{% endif %}"></i>
+                    </a>
+                </div>
+                <div class="ratings_rate">
+                    <a
+                        href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.average_rating|floatformat:"-1" }}/5</a>
+                </div>
+                <div class="ratings_count">
+                    <a href="{% url 'product_view' product.id product.slug product.sku %}">({{ product.count_review }}
+                        Ratings)</a>
+                </div>
+            </div>
+            <a {% if product.quantity_on_stock <= 0 %}
+                {% else %}href="{% if request.user.is_authenticated %}{% url 'add_to_cart' product.id %}{% else %}{% url 'account_login' %}?next={{request.path}}{% endif %}"
+                {% endif %} class="btn add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="empty_p">
+        <a href="{% url 'product_all' %}" class="btn btn-l" style="margin-top: 1rem;"> View All Products</a>
+    </div>
+
+</div>

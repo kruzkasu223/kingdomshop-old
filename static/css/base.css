@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+* > a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background-color: var(--wc);
+    color: var(--bc);
+    font-family: var(--pff);
+}
+
+:root {
+    --pff: "Roboto", Sans-Serif;
+    --sff: "Roboto Slab", Serif;
+    --pc: #ffbb4d;
+    --sc: #fff3e0;
+    /* --pc: #80cbc4;
+    --sc: #e0f2f1; */
+    --bc: #1a202c;
+    --wc: #e2e8f0;
+    --smc: #cef2ce;
+    --emc: #f2e0e0;
+}
+
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.main_title {
+    font-family: var(--sff);
+    margin: 2rem;
+    text-align: center;
+}
+
+.btn {
+    display: inline-block;
+    font-size: 1rem;
+    border: none;
+    padding: 0.25rem 0.75rem;
+    margin: 0.25rem;
+    border-radius: 0.25rem;
+    background-color: var(--pc);
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn:hover,
+.btn:focus {
+    filter: brightness(85%);
+}
+
+.btn-l {
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    font-family: var(--sff);
+}
+
+.success_msg {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: green;
+    text-align: center;
+    background-color: var(--smc);
+    border-radius: 0.5rem;
+}
+
+.error_msg {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+    background-color: var(--emc);
+    border-radius: 0.5rem;
+}
+
+.empty_p {
+    text-align: center;
+    margin: 0.5rem 0;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.badge {
+    font-size: 0.8rem;
+    margin-left: 0.25rem;
+    background-color: var(--sc);
+    border-radius: 0.25rem;
+    padding: 0.125rem;
+}
+
+@media (min-width: 600px) {
+    .container {
+        width: 90%;
+    }
+}

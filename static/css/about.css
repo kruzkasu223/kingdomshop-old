@@ -1,0 +1,8 @@
+.about_us_wrap {
+    width: 90%;
+    max-width: 600px;
+    margin: 1rem auto;
+    background-color: var(--sc);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}

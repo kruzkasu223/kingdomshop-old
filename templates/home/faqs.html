@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/categories.css' %}" rel="stylesheet">
+<style>
+    .panel {
+        margin: 1rem 0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/categories.js' %}"></script>
+{% endblock %}
+
+{% block title %}FAQs{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">FAQs</h2>
+
+    <div class="accordion_wrap">
+        {% for item in faqs %}
+        <h4 class="accordion">
+            {{ item.id }}. {{ item.question }}
+        </h4>
+        <div class="panel">
+            {{ item.answer|safe }}
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

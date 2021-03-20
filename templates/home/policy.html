@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/policy.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}All Policies{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Policies</h2>
+    <div class="policy_btn_div">
+
+        {% for item in policy %}
+        <a class="btn btn-l" href="{{ item.slug }}">{{ item.policy_name }}</a>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

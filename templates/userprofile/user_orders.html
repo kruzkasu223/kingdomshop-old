@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/user_order.css' %}" rel="stylesheet">
+<link href="{% static 'css/product_listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/paginator.css' %}" rel="stylesheet">
+<style>
+    .product_card {
+        height: 150px !important;
+        margin: .25rem auto !important;
+        padding: .5rem !important;
+    }
+
+    .card_prod_title {
+        font-size: 1rem !important;
+        margin: 0 !important;
+    }
+
+    .card_prod_price {
+        margin: 0 !important;
+    }
+
+    .main_price {
+        font-size: 1rem !important;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+Your Orders
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Your Orders</h2>
+
+    {% if orders %}
+    {% for order in orders %}
+    <div class="order_div_wrap">
+
+        <p>Order ID: <span class="bold">{{ order.order_txnid }}</span></p>
+        <p>Payment ID: <span class="bold">{{ order.razorpay_payment_id }}</span></p>
+        <p>Order Status: <span class="bold">{{ order.status }}</span>{% if order.status == "Failed" %}(Your order process has been failed, You have to order again.){% endif %}</p>
+        {% if order.admin_note %}<p>Message From Admin: <span class="bold">{{ order.admin_note }}</span></p>{% endif %}
+        <p>Order Total: <span class="bold">₹{{ order.total|intcomma }}</span></p>
+
+        <h3 class="underline h3_title">Ordered Products</h3>
+        {% for rs in ordered_products %}
+        {% if rs.order.order_txnid == order.order_txnid %}
+        <div class="product_card">
+            <div class="card_prod_img_div">
+                <a href="{% url 'product_view' rs.product.id rs.product.slug rs.product.sku %}">
+                    <img class="card_prod_img" src="{{ rs.product.image.url }}" alt="{{ rs.product.title }}">
+                </a>
+            </div>
+            <div class="card_prod_detail">
+                <div class="card_prod_title">
+                    <a
+                        href="{% url 'product_view' rs.product.id rs.product.slug rs.product.sku %}">{{ rs.product.title }}</a>
+                </div>
+                <div class="card_prod_price">
+                    <a href="{% url 'product_view' rs.product.id rs.product.slug rs.product.sku %}">Price: ₹<span
+                            class="main_price">{{ rs.price|intcomma }}</span></a>
+                </div>
+                <div>
+                    <p>Quantity: <span class="bold">{{ rs.quantity }}</span></p>
+                    <p>Total: ₹<span class="bold main_price">{{ rs.totalPrice|intcomma }}</span></p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        <h3 class="underline h3_title">Shipping Address Details</h3>
+        <p>Name: <span class="bold">{{ order.first_name }} {{ order.last_name }}</span></p>
+        <p>Email: <span class="bold">{{ order.email }}</span></p>
+        <p>Phone: <span class="bold">{{ order.phone }}</span></p>
+        <p>Address Line 1: <span class="bold">{{ order.address_line_1 }}</span></p>
+        {% if order.address_line_2 %}<p>Address Line 2: <span class="bold">{{ order.address_line_2 }}</span></p>
+        {% endif %}
+        <p>Pincode: <span class="bold">{{ order.pincode }}</span></p>
+        <p>City: <span class="bold">{{ order.city }}</span></p>
+        <p>State: <span class="bold">{{ order.state }}</span></p>
+        <p>Note: {% if order.note %}<span class="bold">{{ order.note }}</span>{% else %}-{% endif %}</p>
+        <p>Invoice: {% if order.invoice %}<a href="{{ order.invoice.url }}" class="btn bold" target="_blank">View /
+                Download</a>{% else %}You'll get Invoice when order is Despatched.{% endif %}</p>
+
+        <p class="date_time">Order Created: {{ order.created_at }}</p>
+
+        <p>(If you want to cancel/refund/return your order, then <a class="btn"
+                style="margin: 0; padding: .125rem 0.3rem;" href="{% url 'contact' %}">contact
+                us</a> with your order details.)</p>
+    </div>
+    {% endfor %}
+
+    {% if orders.paginator.num_pages > 1 %}
+    <div class="paginator_wrap">
+        <div class="paginator">
+            {% if orders.has_previous %}
+            <a class="link" href="?page=1">First</a>
+            <a class="link" href="?page={{ orders.previous_page_number }}">Prev</a>
+            {% endif %}
+            {% for num in orders.paginator.page_range %} <br>
+            {% if orders.number == num %}
+            <span class="link link_active">{{ num }}</span>
+            {% elif num > orders.number|add:'-3' and num < orders.number|add:'3' %}
+            <a class="link" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            {% if orders.has_next %}
+            <a class="link" href="?page={{ orders.next_page_number }}">Next</a>
+            <a class="link" href="?page={{ orders.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
+        <div class="empty_p">
+            (Page {{ orders.number }} of {{ orders.paginator.num_pages }})
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <p class="empty_p">You don't have any orders yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

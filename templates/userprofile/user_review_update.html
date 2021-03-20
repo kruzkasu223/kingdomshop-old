@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/product_review.css' %}" rel="stylesheet">
+<style>
+    .prod_p {
+        margin: .5rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/product_review.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+Edit Review
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">Edit Review</h2>
+
+        <div class="form_div">
+
+            <form class="form_source" id="review-form" action="" method="post" accept-charset="utf-8" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <p class="underline prod_p">Product: <span class="bold"><a
+                            href="{% url 'product_view' review.product.id review.product.slug review.product.sku %}">{{ review.product.title }}</a></span>
+                </p>
+
+                <fieldset class="rating">
+                    <legend>Rating:</legend>
+
+                    <input id="rating-5" type="radio" name="rating" value="5"
+                        {% if review.rating == 5 %}checked="checked" {% endif %} />
+                    <label class="full" for="rating-5" title="5/5">*****</label>
+
+                    <input id="rating-4" type="radio" name="rating" value="4"
+                        {% if review.rating == 4 %}checked="checked" {% endif %} />
+                    <label class="full" for="rating-4" title="4/5">****</label>
+
+                    <input id="rating-3" type="radio" name="rating" value="3"
+                        {% if review.rating == 3 %}checked="checked" {% endif %} />
+                    <label class="full" for="rating-3" title="3/5">***</label>
+
+                    <input id="rating-2" type="radio" name="rating" value="2"
+                        {% if review.rating == 2 %}checked="checked" {% endif %} />
+                    <label class="full" for="rating-2" title="2/5">**</label>
+
+                    <input id="rating-1" type="radio" name="rating" value="1"
+                        {% if review.rating == 1 %}checked="checked" {% endif %} />
+                    <label class="full" for="rating-1" title="1/5">*</label>
+
+                    <span>(1 is Worst and 5 is Best)</span>
+                </fieldset>
+
+                <div class="form-item form-name">
+                    {% render_field form.title class="form-input" id="form-subject" required="true" placeholder="" %}
+                    <label for="title" class="form-label" id="subject-label">{{ form.title.label_tag }}
+                        (optional)</label>
+
+                    <p class="error_msg" id="subject-error-message"></p>
+                    {% if form.title.errors %}
+                    {% for error in form.title.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item">
+                    {% render_field form.review class="form-input form-msg" type="textarea" id="form-msg" required="true" placeholder="" %}
+                    <label for="note" class="form-label form-msg-label" id="msg-label">{{ form.review.label_tag }}
+                        (optional)</label>
+
+                    <p class="error_msg" id="msg-error-message"></p>
+                    {% if form.review.errors %}
+                    {% for error in form.review.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <p class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" id="form-submit" value="Update">
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

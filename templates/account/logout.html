@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Log Out{% endblock %}
+
+{% block body %}
+<div class="container">
+
+  <h1 class="main_title">Log Out</h1>
+
+  {% if messages %}
+  {% for message in messages %}
+  <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
+
+
+  <form class="empty_p" method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <div class="error_msg">
+      {{ error }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <p class="empty_p">Are you sure you want to log out?</p>
+
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <button type="submit" class="btn btn-l">Log Out</button>
+  </form>
+
+</div>
+{% endblock %}

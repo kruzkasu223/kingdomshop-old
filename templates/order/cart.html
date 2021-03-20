@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/product_listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/cart.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+Cart ({{ cart.count }})
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Cart</h2>
+
+    <div>
+
+        {% if cart.count == 0 %}
+        <p class="empty_p">Your Cart is Empty.</p>
+        {% else %}
+
+        {% for rs in cart %}
+        <div class="product_card">
+            <div class="card_prod_img_div">
+                <a href="{% url 'product_view' rs.product.id rs.product.slug rs.product.sku %}">
+                    <img class="card_prod_img" src="{{ rs.product.image.url }}" alt="{{ rs.product.title }}">
+                </a>
+            </div>
+            <div class="card_prod_detail">
+                <div class="card_prod_title">
+                    <a
+                        href="{% url 'product_view' rs.product.id rs.product.slug rs.product.sku %}">{{ rs.product.title }}</a>
+                </div>
+                <div class="card_prod_price">
+                    {% if not rs.product.discount_price %}
+                    <a href="{% url 'product_view' rs.product.id rs.product.slug rs.product.sku %}">Price: ₹<span
+                            class="main_price">{{ rs.product.price|intcomma }}</span></a>
+                    {% else %}
+                    <a href="{% url 'product_view' rs.product.id rs.product.slug rs.product.sku %}">Price: ₹<span
+                            class="main_price">{{ rs.product.discount_price|intcomma }}</span>
+                        <del><span class="disc_price">₹{{ rs.product.price|intcomma }}</span></del></a>
+                    {% endif %}
+                </div>
+
+                <div class="quantity_box">
+                    <p>Quantity: </p>
+                    <div class="quantity_btn">
+                        <a href="{% url 'minus_to_cart' rs.id %}"><i class="fa fa-minus-square-o"></i></a>
+                    </div>
+                    <div class="">
+                        <span class="bold">{{ rs.quantity }}</span>
+                    </div>
+                    <div class="quantity_btn">
+                        <a {% if rs.product.quantity_on_stock <= 0 %}
+                            {% else %}href="{% url 'add_to_cart' rs.product.id %}" {% endif %}><i
+                                class="fa fa-plus-square-o"></i></a>
+                    </div>
+                </div>
+                <p>Total: ₹<span class="bold">{{ rs.totalPrice|intcomma }}</span></p>
+                <a class="btn" href="{% url 'delete_from_cart' rs.id %}"><i class="fa fa-trash"></i> Remove</a>
+
+            </div>
+        </div>
+        {% endfor %}
+        <div class="main_div main_price">Cart Total: ₹{{ total|intcomma }}</div>
+        <div class="btn_div_po">
+            <a href="{% url 'place_order' %}" class="btn btn-l">Place Order</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

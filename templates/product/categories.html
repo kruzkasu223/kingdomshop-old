@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load mptt_tags %}
+
+{% block style %}
+<link href="{% static 'css/categories.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/categories.js' %}"></script>
+{% endblock %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Categories</h2>
+
+    <div class="accordion_wrap">
+        {% recursetree categories %}
+        {% if node.is_leaf_node %}<a id="last_node" href="{% url 'category_products' node.id node.slug %}">{% endif %}
+            <p {% if not node.is_leaf_node %}class="accordion" {% else %} class="last_node" {% endif %}>
+                {{ node.title }}
+            </p>
+            {% if node.is_leaf_node %}</a>{% endif %}
+        {% if not node.is_leaf_node %}
+        <div class="panel">{{ children }}</div>
+        {% endif %}
+        {% endrecursetree %}
+    </div>
+
+</div>
+
+{% endblock %}

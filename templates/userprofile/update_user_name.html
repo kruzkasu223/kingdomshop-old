@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/form.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/user_name.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+Edit Name
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">Edit Name</h2>
+
+        <div class="form_div">
+            <form class="form_source" id="name_form" method="post" action="" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="form-item form-name">
+                    {% render_field form.first_name class="form-input" id="form-fname" required="true" placeholder="" %}
+                    <label for="name" class="form-label" id="name-label">{{ form.first_name.label_tag }}</label>
+
+                    <p class="error_msg" id="fname-error-message"></p>
+                    {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {% render_field form.last_name class="form-input" id="form-lname" required="true" placeholder="" %}
+                    <label for="name" class="form-label" id="name-label">{{ form.last_name.label_tag }}</label>
+
+                    <p class="error_msg" id="lname-error-message"></p>
+                    {% if form.last_name.errors %}
+                    {% for error in form.last_name.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <p style="margin-top: 1rem;" class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" id="form-submit" value="Update">
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

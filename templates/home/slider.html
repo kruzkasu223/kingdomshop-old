@@ -1,0 +1,43 @@
+{% load static %}
+
+<div class="carousel_wrap">
+    <div class="carousel">
+        <button class="carousel__btn carousel__btn--left">
+            <i class="fa fa-arrow-circle-left"></i>
+        </button>
+
+        <div class="carousel__track-container">
+            <ul class="carousel__track">
+
+                {% for slide in slider %}
+
+                <li class="carousel__slide current-slide">
+                    <a {% if slide.url is not none %} href="{{ slide.url }}" {% endif %}>
+                        <img class="carousel__image" src="{{ slide.slider_image.url }}" alt="">
+                    </a>
+                </li>
+
+                {% endfor %}
+
+            </ul>
+        </div>
+
+        <button class="carousel__btn carousel__btn--right">
+            <i class="fa fa-arrow-circle-right"></i>
+        </button>
+
+        <div class="carousel__nav">
+
+            {% for slide in slider %}
+
+            {% if slide.order is 1 %}
+            <button class="carousel__indicator current-slide"></button>
+            {% else %}
+            <button class="carousel__indicator"></button>
+            {% endif %}
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

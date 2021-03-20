@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/userprofile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block title %}
+Your Account
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">Your Profile</h2>
+
+    <div class="btn_div_profile">
+        <a href="{% url 'user_orders' %}" class="btn btn-l">Your Orders</a>
+        <a href="{% url 'user_reviews' %}" class="btn btn-l">Your Reviews</a>
+        <a href="{% url 'wishlist' %}" class="btn btn-l">Your Wishlist</a>
+    </div>
+
+    <div class="profile_wrap">
+        <div class="detail_wrap">
+            <div>
+                <p>Name: <span class="bold">{{ user.first_name }} {{ user.last_name }}</span></p>
+            </div>
+            <a href="{% url 'update_user_name' %}" class="btn"><i class="fa fa-pencil-square-o"></i> Edit Name</a>
+        </div>
+
+        <div class="detail_wrap">
+            <div>
+                <p>E-mail Address: <span class="bold">{{ user.email }}</span></p>
+            </div>
+            <a href="{% url 'account_email' %}" class="btn"><i class="fa fa-pencil-square-o"></i> Edit E-mail</a>
+        </div>
+
+        <div class="detail_wrap">
+            <div>
+                <p>Password: <span class="bold">********</span></p>
+            </div>
+            <a href="{% url 'account_change_password' %}" class="btn"><i class="fa fa-pencil-square-o"></i> Change
+                Password</a>
+        </div>
+
+        <div class="detail_wrap">
+            <div>
+                <p>Phone Number:
+                    <span
+                        class="bold">{% if userdetail.phone is none %}-{% else %}{{ userdetail.phone }}{% endif %}</span>
+                </p>
+                <p>Age: <span class="bold">{% if userdetail.age is none %}-{% else %}{{ userdetail.age }}{% endif %}</p>
+                </span>
+                <p>Gender: <span
+                        class="bold">{% if userdetail.gender is none %}-{% else %}{{ userdetail.gender }}{% endif %}</span>
+                </p>
+            </div>
+            <a href="{% url 'update_user_details' %}" class="btn"><i class="fa fa-pencil-square-o"></i> Edit Details</a>
+        </div>
+
+        <div class="detail_wrap">
+            <div>
+                <p>Address Line 1:
+                    <span
+                        class="bold">{% if useraddress.address_line_1 is none %}-{% else %}{{ useraddress.address_line_1 }}{% endif %}</span>
+                </p>
+                <p>Address Line 2:
+                    <span
+                        class="bold">{% if useraddress.address_line_2 is none %}-{% else %}{{ useraddress.address_line_2 }}{% endif %}</span>
+                </p>
+                <p>Pin Code:
+                    <span
+                        class="bold">{% if useraddress.pincode is none %}-{% else %}{{ useraddress.pincode }}{% endif %}</span>
+                </p>
+                <p>City: <span
+                        class="bold">{% if useraddress.city is none %}-{% else %}{{ useraddress.city }}{% endif %}</span>
+                </p>
+                <p>State: <span
+                        class="bold">{% if useraddress.state is none %}-{% else %}{{ useraddress.state }}{% endif %}</span>
+                </p>
+            </div>
+            <a href="{% url 'update_user_address' %}" class="btn"><i class="fa fa-pencil-square-o"></i> Edit Address</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

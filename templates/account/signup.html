@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/form.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/account_register.js' %}"></script>
+{% endblock %}
+
+
+{% block title %}Create an Account{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="form_div_wrap">
+
+        <h2 class="main_title">Create an Account</h2>
+
+        <div class="form_div">
+            <form class="form_source" id="signup_form" method="post" action="{% url 'account_signup' %}" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="error_msg">
+                    {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <div class="form-item form-email">
+                    {% render_field form.email type="text" class="form-input" id="form-email" inputmode="email" required="true" placeholder="" %}
+                    <label for="email" class="form-label" id="email-label">{{ form.email.label_tag }}</label>
+
+                    <p class="error_msg" id="email-error-message"></p>
+                    {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {% render_field form.first_name class="form-input" id="form-fname" required="true" placeholder="" %}
+                    <label for="name" class="form-label" id="name-label">{{ form.first_name.label_tag }}</label>
+
+                    <p class="error_msg" id="fname-error-message"></p>
+                    {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {% render_field form.last_name class="form-input" id="form-lname" required="true" placeholder="" %}
+                    <label for="name" class="form-label" id="name-label">{{ form.last_name.label_tag }}</label>
+
+                    <p class="error_msg" id="lname-error-message"></p>
+                    {% if form.last_name.errors %}
+                    {% for error in form.last_name.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {% render_field form.password1 class="form-input" id="form-pass1" required="true" placeholder="" %}
+                    <label for="name" class="form-label" id="name-label">{{ form.password1.label_tag }}</label>
+
+                    <p class="error_msg" id="pass1-error-message"></p>
+                    {% if form.password1.errors %}
+                    {% for error in form.password1.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-item form-name">
+                    {% render_field form.password2 class="form-input" id="form-pass2" required="true" placeholder="" %}
+                    <label for="name" class="form-label" id="name-label">{{ form.password2.label_tag }}</label>
+
+                    <p class="error_msg" id="pass2-error-message"></p>
+                    {% if form.password2.errors %}
+                    {% for error in form.password2.errors %}
+                    <p class="error_msg">{{ error }}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <p style="margin-top: 1rem;" class="error_msg" id="submit-error-message"></p>
+                <div class="form-item form-btn">
+                    <input type="submit" name="Submit" class="btn btn-l" id="form-submit" value="Create an Account">
+                </div>
+
+                <p class="empty_p">by creating an account with us, you accept our <a style="text-decoration: underline;"
+                        href="{% url 'policy' %}">all
+                        policies.</a></p>
+
+            </form>
+
+            <p class="empty_p" style="margin-top: 1.5rem;">Already have an account?
+                <a class="btn" href="{% url 'account_login' %}">Log In</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

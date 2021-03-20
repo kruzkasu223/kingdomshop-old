@@ -1,0 +1,17 @@
+.order_div_wrap {
+    width: 100%;
+    max-width: 800px;
+    background-color: var(--sc);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem auto;
+    line-height: 1.4em;
+}
+
+.h3_title {
+    margin: 0.5rem 0;
+}
+
+.date_time {
+    margin: 0.5rem 0;
+}

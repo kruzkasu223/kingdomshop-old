@@ -1,0 +1,270 @@
+/* Photo & Slider Begin */
+
+.featured_div {
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.featured_img {
+    width: 90%;
+    max-width: 900px;
+    height: 90%;
+    max-height: 900px;
+    object-fit: contain;
+}
+
+.thumbnail_div {
+    display: inline-block;
+    min-width: 100px;
+    width: 25%;
+    height: 100px;
+    max-width: 200px;
+    max-height: 200px;
+    padding: 0.25rem;
+    margin: 0.5rem;
+    background-color: white;
+    border: 1px solid var(--bc);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.5;
+}
+
+.thumbnail.active {
+    opacity: 1;
+    background-color: white;
+}
+
+.thumbnail:hover,
+.thumbnail:focus {
+    opacity: 1;
+}
+
+.slider_wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.slider {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+.arrow {
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow .fa {
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.arrow .fa:hover,
+.arrow .fa:focus {
+    opacity: 0.7;
+}
+
+/* Normal Styling */
+
+.prod_title {
+    margin: 1rem 0;
+    font-family: var(--sff);
+}
+
+.prod_cate {
+    font-weight: normal;
+}
+
+.prod_price {
+    margin: 1rem;
+}
+
+.price_main {
+    font-size: 1.4rem;
+    font-weight: bold;
+    font-family: var(--sff);
+}
+
+.varient_div {
+    margin: 1rem;
+}
+
+.varient {
+    display: inline-block;
+    background-color: var(--sc);
+    margin: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.v_active {
+    background-color: var(--pc);
+}
+
+.ratings_div_view {
+    display: flex;
+    margin: 1rem;
+}
+
+.ratings_rate {
+    margin: 0 0.5rem;
+    font-weight: bold;
+}
+
+.ratings_count {
+    cursor: pointer;
+}
+
+.cart_btn_div {
+    margin: 1rem;
+}
+
+.btns_div_c2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.prod_detailed_desc {
+    margin: 1rem;
+    background-color: var(--sc);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.detailed_desc {
+    margin: 1rem 0;
+    width: 100%;
+}
+
+.detailed_desc li {
+    margin-left: 0.5rem;
+}
+
+.detailed_desc table {
+    margin: 0.5rem 0 0;
+    width: 100%;
+    border-collapse: collapse;
+    border: 0;
+}
+
+.detailed_desc table th,
+.detailed_desc table td {
+    border: 0;
+    border-bottom: 1px solid var(--bc);
+    border-left: 1px solid var(--bc);
+    padding: 0.25rem;
+    text-align: left;
+}
+
+.detailed_desc table td:first-child {
+    border-left: 0;
+}
+
+.detailed_desc table tr:nth-child(even) {
+    background-color: var(--wc);
+}
+
+.detailed_desc img {
+    margin: 1rem 0;
+    width: 80%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.quantity_left {
+    width: 100%;
+    background-color: var(--sc);
+    padding: 0.5rem;
+    margin: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
+.prod_date_time {
+    font-size: 0.85rem;
+}
+
+.btns_div_c1 {
+    display: none;
+}
+
+.btns_div_cart {
+    display: none;
+}
+
+.other_product {
+    margin: 3rem 0 0 0;
+}
+
+@media (min-width: 800px) {
+    .column_div {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .column {
+        width: 48%;
+    }
+
+    .column_1_div {
+        top: 10rem;
+        width: 100%;
+        position: -webkit-sticky;
+        position: sticky;
+    }
+
+    .prod_price {
+        margin-top: 4.5rem;
+    }
+
+    .btns_div_c1 {
+        width: 95%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+    }
+    .btns_div_c2 {
+        display: none;
+    }
+
+    .btn_div_c1 {
+        width: 48%;
+    }
+
+    .btns_div_cart {
+        display: block;
+        margin: 0 0 0 1rem;
+    }
+
+    .add-wish,
+    .buy-now {
+        width: 100%;
+    }
+}
+
+@media (min-width: 900px) {
+    .column_1_div {
+        top: 8.5rem;
+    }
+}

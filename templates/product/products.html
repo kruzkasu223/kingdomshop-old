@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+{% load mptt_tags %}
+{% load hometags %}
+
+{% block style %}
+<link href="{% static 'css/product_listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/paginator.css' %}" rel="stylesheet">
+<style>
+    .form_div_wrap {
+        margin: 1rem auto;
+        width: 100%;
+        max-width: 800px;
+    }
+
+    .form_div {
+        width: 80%;
+        font-size: 1rem;
+        margin: 0 auto;
+    }
+
+    .form_source {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-item {
+        position: relative;
+        width: 100%;
+        margin-right: 1rem;
+    }
+
+    .form-input {
+        width: 100%;
+        height: 2.75rem;
+        margin: 1rem auto;
+        padding: 0.5rem 0.5rem 0;
+        font-size: 1rem;
+        box-sizing: border-box;
+        box-shadow: none;
+        outline: none;
+        color: var(--bc);
+        border: 2px solid var(--bc);
+        border-radius: 0.25rem;
+        background: transparent;
+    }
+
+    .form-label {
+        position: absolute;
+        font-size: 0.80rem;
+        top: 1.2rem;
+        left: calc(0.5rem + 2px);
+        color: var(--bc);
+        pointer-events: none;
+        transition: 0.1s;
+    }
+
+    .form-input:focus,
+    .form-input:valid {
+        border-color: var(--pc);
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+All Products
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div {% if message.tags == 'success' %}class="success_msg" {% else %}class="error_msg" {% endif %}>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <h2 class="main_title">All Products</h2>
+
+    <div class="form_div_wrap">
+        <div class="form_div">
+            <form class="form_source" method="get" accept-charset="utf-8">
+                <div class="form-item">
+                    <label for="id_category" class="form-label"
+                        style="font-size: 0.80rem; top: 1.2rem;">Category:</label>
+                    <select name="category" class="form-input" id="id_category">
+                        <option value="" selected="">---------</option>
+                        {% recursetree categories %}
+                        {{ children }}
+                        {% if node.is_leaf_node %}
+                        <option value="{{node.id}}">{{node.title}}</option>
+                        {% endif %}
+                        {% endrecursetree %}
+                    </select>
+                </div>
+                <input type="submit" class="btn" value="Filter">
+            </form>
+        </div>
+    </div>
+
+    {% for product in products %}
+    <div class="product_card">
+        <div class="card_prod_img_div">
+            <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                <img class="card_prod_img" src="{{ product.image.url }}" alt="{{ product.title }}">
+            </a>
+        </div>
+        <div class="card_prod_detail">
+            <div class="card_prod_title">
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.title }}</a>
+            </div>
+            <div class="card_prod_price">
+                {% if not product.discount_price %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.price|intcomma }}</span></a>
+                {% else %}
+                <a href="{% url 'product_view' product.id product.slug product.sku %}">₹<span
+                        class="main_price">{{ product.discount_price|intcomma }}</span>
+                    <del><span class="disc_price">₹{{ product.price|intcomma }}</span></del></a>
+                {% endif %}
+            </div>
+            <div class="ratings_div">
+                <div class="review_rating">
+                    <a href="{% url 'product_view' product.id product.slug product.sku %}">
+                        <i class="fa fa-star {% if product.average_rating < 0.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 1.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 2.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 3.5 %}star-black{% endif %}"></i>
+                        <i class="fa fa-star {% if product.average_rating < 4.5 %}star-black{% endif %}"></i>
+                    </a>
+                </div>
+                <div class="ratings_rate">
+                    <a
+                        href="{% url 'product_view' product.id product.slug product.sku %}">{{ product.average_rating|floatformat:"-1" }}/5</a>
+                </div>
+                <div class="ratings_count">
+                    <a href="{% url 'product_view' product.id product.slug product.sku %}">({{ product.count_review }}
+                        Ratings)</a>
+                </div>
+            </div>
+            <a {% if product.quantity_on_stock <= 0 %}
+                {% else %}href="{% if request.user.is_authenticated %}{% url 'add_to_cart' product.id %}{% else %}{% url 'account_login' %}?next={{request.path}}{% endif %}"
+                {% endif %} class="btn add-cart"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if products.paginator.num_pages > 1 %}
+    <div class="paginator_wrap">
+        <div class="paginator">
+            {% if products.has_previous %}
+            <a class="link" href="{% relative_url 1 'page' request.GET.urlencode %}">First</a>
+            <a class="link"
+                href="{% relative_url products.previous_page_number 'page' request.GET.urlencode %}">Prev</a>
+            {% endif %}
+            {% for num in products.paginator.page_range %} <br>
+            {% if products.number == num %}
+            <span class="link link_active">{{ num }}</span>
+            {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+            <a class="link" href="{% relative_url num 'page' request.GET.urlencode %}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            {% if products.has_next %}
+            <a class="link" href="{% relative_url products.next_page_number 'page' request.GET.urlencode %}">Next</a>
+            <a class="link" href="{% relative_url products.paginator.num_pages 'page' request.GET.urlencode %}">Last</a>
+            {% endif %}
+        </div>
+        <div class="empty_p">
+            (Page {{ products.number }} of {{ products.paginator.num_pages }})
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
