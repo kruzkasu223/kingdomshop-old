@@ -1,4 +1,3 @@
-# code starts here
 # change settings from .dev to .prod
 
 sudo nano shop/settings/current.py
